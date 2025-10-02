@@ -461,17 +461,17 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
 
         break;
     case 'baiduid':
-        error_log("[DEBUG] Baiduid case triggered");
-        error_log("[DEBUG] UID: " . (defined('UID') ? UID : 'NOT DEFINED'));
-        error_log("[DEBUG] BDUSS param: " . (isset($_GET['bduss']) ? 'SET' : 'NOT SET'));
-        error_log("[DEBUG] STOKEN param: " . (isset($_GET["stoken"]) ? 'SET' : 'NOT SET'));
+        log_debug("[DEBUG Baiduid case triggered");
+        log_debug("[DEBUG UID: " . (defined('UID') ? UID : 'NOT DEFINED'));
+        log_debug("[DEBUG BDUSS param: " . (isset($_GET['bduss']) ? 'SET' : 'NOT SET'));
+        log_debug("[DEBUG STOKEN param: " . (isset($_GET["stoken"]) ? 'SET' : 'NOT SET'));
 
         if (isset($_GET['delete'])) {
             doAction('baiduid_set_1');
             CleanUser(UID);
             $m->query("DELETE FROM `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE `" . DB_PREFIX . "baiduid`.`uid` = " . UID);
         } elseif (!empty($_GET['bduss']) && !empty($_GET["stoken"])) {
-            error_log("[DEBUG] Processing bduss binding");
+            log_debug("[DEBUG Processing bduss binding");
 
             if (option::get('bduss_num') == '-1' && ROLE != 'admin') {
                 msg('本站禁止绑定新账号');
@@ -494,18 +494,18 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
             $stoken = str_replace(' ', '', $stoken);
             $stoken = sqladds($stoken);
 
-            error_log("[DEBUG] Calling getBaiduUserInfo");
+            log_debug("[DEBUG Calling getBaiduUserInfo");
             //get user info
             $baiduUserInfo = getBaiduUserInfo($bduss);
-            error_log("[DEBUG] getBaiduUserInfo result: " . json_encode($baiduUserInfo));
+            log_debug("[DEBUG getBaiduUserInfo result: " . json_encode($baiduUserInfo));
 
             if (empty($baiduUserInfo["portrait"])) {
-                error_log("[DEBUG] Portrait empty, showing error");
+                log_debug("[DEBUG Portrait empty, showing error");
                 msg('您的 Cookie 信息有误，请核验后重新绑定。调试信息：' . json_encode($baiduUserInfo));
             }
             $baidu_name = sqladds($baiduUserInfo["name"]);
             $baidu_name_portrait = sqladds($baiduUserInfo["portrait"]);
-            error_log("[DEBUG] Baidu name: $baidu_name, portrait: $baidu_name_portrait");
+            log_debug("[DEBUG Baidu name: $baidu_name, portrait: $baidu_name_portrait");
 
             doAction('baiduid_set_2');
 
@@ -519,16 +519,16 @@ msg('<meta http-equiv="refresh" content="0; url=setting.php?mod=updatefid&step='
 
             if ($same_pid == '3' && $checkSame['uid'] == UID && !empty($checkSame)) {
                 $sql = "UPDATE `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` SET `bduss`='{$bduss}', `stoken`='{$stoken}' WHERE `id` = '{$checkSame["id"]}';";
-                error_log("[DEBUG] Executing UPDATE: $sql");
+                log_debug("[DEBUG Executing UPDATE: $sql");
                 $result = $m->query($sql);
-                error_log("[DEBUG] Update result: " . ($result ? 'SUCCESS' : 'FAILED'));
+                log_debug("[DEBUG Update result: " . ($result ? 'SUCCESS' : 'FAILED'));
             } else {
                 $sql = "INSERT INTO `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` (`id`,`uid`,`bduss`,`stoken`,`name`,`portrait`) VALUES  (NULL,'" . UID . "', '{$bduss}', '{$stoken}', '{$baidu_name}', '{$baidu_name_portrait}')";
-                error_log("[DEBUG] Executing INSERT: $sql");
+                log_debug("[DEBUG Executing INSERT: $sql");
                 $result = $m->query($sql);
-                error_log("[DEBUG] Insert result: " . ($result ? 'SUCCESS' : 'FAILED'));
+                log_debug("[DEBUG Insert result: " . ($result ? 'SUCCESS' : 'FAILED'));
                 if ($result) {
-                    error_log("[DEBUG] Insert ID: " . $m->insert_id());
+                    log_debug("[DEBUG Insert ID: " . $m->insert_id());
                 }
             }
         } elseif (!empty($_GET['del'])) {

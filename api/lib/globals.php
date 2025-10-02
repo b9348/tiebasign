@@ -55,7 +55,7 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
         define('EMAIL', $p['email']);
         define('TABLE', $p['t']);
         if (!defined('SYSTEM_ONLY_CHECK_LOGIN')) {
-            error_log("[GLOBALS] Starting user data initialization for UID: " . $p['id']);
+            log_debug("[GLOBALS] Starting user data initialization for UID: " . $p['id']);
             $i['user']['login'] = true;
             $i['user']['role'] = $p['role'];
             $i['user']['uid'] = $p['id'];
@@ -65,12 +65,12 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
             $i['user']['bduss'] = array();
             $i['user']['table'] = $p['t'];
 
-            error_log("[GLOBALS] Querying tieba count...");
+            log_debug("[GLOBALS] Querying tieba count...");
             $i['user']['tbnum'] = $m->fetch_row($m->query('SELECT COUNT(*) FROM  `' . DB_NAME . '`.`' . DB_PREFIX . TABLE . '` WHERE `uid` = ' . UID));
             $i['user']['tbnum'] = $i['user']['tbnum'][0];
-            error_log("[GLOBALS] Tieba count: " . $i['user']['tbnum']);
+            log_debug("[GLOBALS] Tieba count: " . $i['user']['tbnum']);
 
-            error_log("[GLOBALS] Querying baiduid...");
+            log_debug("[GLOBALS] Querying baiduid...");
             $bds = $m->query("SELECT * FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "baiduid` WHERE uid = " . UID);
             while ($bd = $m->fetch_array($bds)) {
                 $bdspid = $bd['id'];
@@ -79,16 +79,16 @@ if (isset($_COOKIE['uid']) && isset($_COOKIE['pwd'])) {
                 $i['user']['baidu_portrait'][$bdspid] = $bd['portrait'];
                 $i['user']['stoken'][$bdspid] = $bd['stoken'];
             }
-            error_log("[GLOBALS] Baiduid count: " . count($i['user']['bduss']));
+            log_debug("[GLOBALS] Baiduid count: " . count($i['user']['bduss']));
 
-            error_log("[GLOBALS] Querying user options...");
+            log_debug("[GLOBALS] Querying user options...");
             $optss = $m->query("SELECT * FROM  `" . DB_NAME . "`.`" . DB_PREFIX . "users_options` WHERE uid = " . UID);
     //$GLOBALS = $i['user'];
             while ($opts = $m->fetch_array($optss)) {
                 $name = $opts['name'];
                 $i['user']['opt'][$name] = $opts['value'];
             }
-            error_log("[GLOBALS] User data initialization completed");
+            log_debug("[GLOBALS] User data initialization completed");
         }
         //是否为VIP，管理员和VIP组的用户都为VIP
         if (ROLE == 'admin') {

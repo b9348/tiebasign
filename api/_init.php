@@ -33,6 +33,7 @@ if (SYSTEM_ISCONSOLE) {
     ob_start('console_htmltag_delete');
 }
 require SYSTEM_ROOT . '/lib/msg.php';
+require SYSTEM_ROOT . '/lib/logger.php';
 
 //如需停止站点运行，请解除注释，即删除开头的 //
 //msg('站点已关闭！请稍后再试，如有疑问请联系站长解决！');

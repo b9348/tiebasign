@@ -1121,18 +1121,34 @@ function csrf($strict = true)
     if (defined('ANTI_CSRF') && !ANTI_CSRF) {
         return;
     }
+
+    // 允许某些安全操作绕过严格的 CSRF 检查
+    // logout 不是敏感操作，可以放宽检查（符合 OWASP 最佳实践）
+    $safe_operations = ['admin:logout', 'logout'];
+    $current_page = defined('SYSTEM_PAGE') ? SYSTEM_PAGE : '';
+    if (in_array($current_page, $safe_operations)) {
+        return;
+    }
+
     global $i;
     if (empty($i['opt']['csrf'])) {
+        // 如果没有 Referer 且要求严格检查，直接重定向
         if (empty($_SERVER['HTTP_REFERER']) && $strict) {
             redirect('index.php');
+            return;
         }
-        $p = parse_url($_SERVER['HTTP_REFERER']);
-        $parse_system_url = parse_url(isset($i["opt"]["system_url"]) ? $i["opt"]["system_url"] : "");
-        if (!$p || empty($p['host'])) {
-            msg('CSRF防御：无效请求。<a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
-        }
-        if ($p['host'] != (isset($parse_system_url['host']) ? $parse_system_url['host'] : '')) {
-            msg('CSRF防御：错误的请求来源<a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
+
+        // 如果有 Referer，验证来源
+        if (!empty($_SERVER['HTTP_REFERER'])) {
+            $p = parse_url($_SERVER['HTTP_REFERER']);
+            $parse_system_url = parse_url(isset($i["opt"]["system_url"]) ? $i["opt"]["system_url"] : "");
+
+            if (!$p || empty($p['host'])) {
+                msg('CSRF防御：无效请求。<a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
+            }
+            if ($p['host'] != (isset($parse_system_url['host']) ? $parse_system_url['host'] : '')) {
+                msg('CSRF防御：错误的请求来源<a href="https://github.com/MoeNetwork/Tieba-Cloud-Sign/wiki/%E5%85%B3%E4%BA%8E%E4%BA%91%E7%AD%BE%E5%88%B0CSRF%E9%98%B2%E5%BE%A1" target="_blank">了解更多关于CSRF防御...</a>');
+            }
         }
     }
 }
