@@ -1,0 +1,38 @@
+# 开发文件
+.git
+.gitignore
+.env
+.env.local
+*.log
+
+# 文档
+README.md
+MIGRATION.md
+PROJECT_STRUCTURE.md
+
+# 原始PHP项目文件（已迁移到api/）
+Tieba-Cloud-Sign/
+
+# 安装文件
+setup/install.lock
+setup/update_cache/
+
+# 临时文件
+*.tmp
+*.cache
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (如果有)
+node_modules/
+
+# 测试文件
+tests/
+*.test.php
+

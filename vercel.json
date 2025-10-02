@@ -1,0 +1,74 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "name": "tieba-cloud-sign",
+  "functions": {
+    "api/**/*.php": {
+      "runtime": "vercel-php@0.7.4",
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "routes": [
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/public/robots.txt"
+    },
+    {
+      "src": "/setup/(.*)",
+      "status": 404,
+      "headers": {
+        "X-Content-Type-Options": "nosniff"
+      }
+    },
+    {
+      "src": "/config.php",
+      "status": 404
+    },
+    {
+      "src": "/(css|js|images)/(.*)",
+      "dest": "/public/$1/$2"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron.php?task=sign",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron.php?task=retry",
+      "schedule": "0 3 * * *"
+    }
+  ],
+  "env": {
+    "PHP_TIMEZONE": "Asia/Shanghai"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}
+

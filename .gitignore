@@ -1,0 +1,44 @@
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# PHP
+vendor/
+composer.lock
+
+# 临时文件
+*.tmp
+*.cache
+*.bak
+
+# 安装锁定文件
+setup/install.lock
+
+# 更新缓存
+setup/update_cache/
+
+# 用户上传文件（如果有）
+uploads/
+
