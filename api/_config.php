@@ -37,9 +37,13 @@ define('ANTI_CSRF', filter_var(
 // 加密用盐
 define('SYSTEM_SALT', getenv('SYSTEM_SALT') ?: '');
 
-// Vercel Serverless环境标识
-define('IS_VERCEL', true);
-define('IS_SERVERLESS', true);
+// Vercel Serverless环境标识（仅在未定义时定义）
+if (!defined('IS_VERCEL')) {
+    define('IS_VERCEL', true);
+}
+if (!defined('IS_SERVERLESS')) {
+    define('IS_SERVERLESS', true);
+}
 
 // 禁用文件写入相关功能
 define('DISABLE_FILE_WRITE', true);
