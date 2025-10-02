@@ -30,10 +30,12 @@
   "redirects": [
     {
       "source": "/setup/(.*)",
+      "destination": "/404",
       "statusCode": 404
     },
     {
       "source": "/config.php",
+      "destination": "/404",
       "statusCode": 404
     }
   ],
