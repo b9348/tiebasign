@@ -22,16 +22,22 @@ $i['db']['name'] = DB_NAME;
 $i['post']    = $_POST;
 $i['get']     = $_GET;
 $i['request'] = $_REQUEST;
+
+error_log("[REG] Loading options from database...");
 $ws = $m->query("SELECT * FROM " . DB_PREFIX . "options");
 while ($wsr = $m->fetch_array($ws)) {
     $key = $wsr['name'];
     $i['opt'][$key] = $wsr['value'];
 }
+error_log("[REG] Options loaded");
+
+error_log("[REG] Loading cron tasks...");
 $rs = $m->query("SELECT *  FROM `" . DB_NAME . "`.`" . DB_PREFIX . "cron` ORDER BY `orde` ASC");
 while ($rsr = $m->fetch_array($rs)) {
     $key = $rsr['name'];
     $i['cron'][$key] = $rsr;
 }
+error_log("[REG] Cron tasks loaded");
 
 //贴吧分表列表
 $i['tabpart'] = $i['table'] = unserialize($i['opt']['fb_tables']);

@@ -16,10 +16,17 @@ define('SQLMODE', 'mysqli');
  */
 define('LONGSQL', false);
 
+error_log("[DB] Starting database connection...");
+error_log("[DB] Host: " . DB_HOST . ", DB: " . DB_NAME);
+
 if (class_exists("mysqli") && SQLMODE != 'mysql') {
     require SYSTEM_ROOT . '/lib/class.mysqli.php';
 } else {
     require SYSTEM_ROOT . '/lib/class.mysql.php';
 }
 require SYSTEM_ROOT . '/lib/class.S.php';
+
+$start_time = microtime(true);
 $m = new S(DB_HOST, DB_USER, DB_PASSWD, DB_NAME, LONGSQL, DB_SSL); //以后直接使用$m->函数()即可操作数据库
+$connect_time = round((microtime(true) - $start_time) * 1000, 2);
+error_log("[DB] Database connected successfully in {$connect_time}ms");
