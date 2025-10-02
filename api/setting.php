@@ -5,7 +5,12 @@
  */
 
 require __DIR__ . '/_init.php';
-csrf();
+
+// 允许 baiduid 手动绑定操作绕过 CSRF 检查（用户通过 URL 直接绑定）
+if (SYSTEM_PAGE != 'baiduid' || empty($_GET['bduss'])) {
+    csrf();
+}
+
 if (ROLE != 'user' && ROLE != 'admin' && ROLE != 'vip') {
     msg('权限不足');
 }
