@@ -9,33 +9,32 @@
       "maxDuration": 10
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
+      "source": "/favicon.ico",
+      "destination": "/public/favicon.ico"
     },
     {
-      "src": "/robots.txt",
-      "dest": "/public/robots.txt"
+      "source": "/robots.txt",
+      "destination": "/public/robots.txt"
     },
     {
-      "src": "/setup/(.*)",
-      "status": 404,
-      "headers": {
-        "X-Content-Type-Options": "nosniff"
-      }
+      "source": "/(css|js|images)/(.*)",
+      "destination": "/public/$1/$2"
     },
     {
-      "src": "/config.php",
-      "status": 404
+      "source": "/(.*)",
+      "destination": "/api/index.php"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/setup/(.*)",
+      "statusCode": 404
     },
     {
-      "src": "/(css|js|images)/(.*)",
-      "dest": "/public/$1/$2"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.php"
+      "source": "/config.php",
+      "statusCode": 404
     }
   ],
   "crons": [
